@@ -11,7 +11,7 @@ a2 = 1
 b2 = 50.0
 u2 = a2/b2#Incremento en S (x)
 rep = 5000
-frec_inicial = 0.5
+frec_inicial = 1/100
 x_init = 0
 y_init = 0.5
 
@@ -55,8 +55,8 @@ def probabilidades(s,a0):
 
     a1 = a0 - u1
 
-    p_menos_mas = u_menos_mas*(1 - probafixM1(s_barra_neg*((1+d0)/(1+d0+a0)),(a0*(1+d1) -a1*(1+d0))/((1+d0+a0)*(1+d0)),frec_inicial))
-    p_menos_menos =  u_menos_menos*(1 - probafixM1(s_barra*((1+d0)/(1+d0+a0)),(a0*(1+d1) -a1*(1+d0))/((1+d0+a0)*(1+d0)) ,frec_inicial))
+    p_menos_mas = u_menos_mas*(1 - probafixM1(s_barra_neg*((1+d0)/(1+d0+a0)),(a0*(1+d1) -a1*(1+d0))/((1+d0+a0)*(1+d0)),1-frec_inicial))
+    p_menos_menos =  u_menos_menos*(1 - probafixM1(s_barra*((1+d0)/(1+d0+a0)),(a0*(1+d1) -a1*(1+d0))/((1+d0+a0)*(1+d0)) ,1-frec_inicial))
     Sum  = p_mas_mas+p_mas_menos+p_menos_menos+p_menos_mas
     p_mas_mas =  p_mas_mas/Sum
     p_menos_mas =  p_menos_mas/Sum
@@ -97,25 +97,35 @@ for i in range(rep):
     bar1.next()
 archivo.close()
 bar1.finish()
-def caminata_completa():
-    x = [x_init]
-    y = [y_init]
-    while True:
-        if abs(x[-1]) >= 1 or y[-1] > 1-u1 or y[-1] < u1:
-            break
-        else:
-            P = probabilidades(x[-1],y[-1])
-            salto = np.random.choice([0,1,2,3],p = P)
-            if salto == 0:
-                y.append(y[-1] + u1)
-                x.append(x[-1] + u2)
-            if salto == 1:
-                y.append(y[-1] + u1)
-                x.append(x[-1] - u2)
-            if salto == 2:
-                y.append(y[-1] - u1)
-                x.append(x[-1] + u2)
-            if salto == 3:
-                y.append(y[-1] - u1)
-                x.append(x[-1] - u2)
-    return x,y
+
+def caminatas_completas(n):
+    for _ in range(n):
+        x = [x_init]
+        y = [y_init]
+        while True:
+            if abs(x[-1]) >= 1 or y[-1] > 1-u1 or y[-1] < u1:
+                break
+            else:
+                P =  probabilidades(x[-1],y[-1])
+                salto = np.random.choice([0,1,2,3],p = P )
+                if salto == 0:
+                    y.append(y[-1] + u1)
+                    x.append(x[-1] + u2)
+                if salto == 1:
+                    y.append(y[-1] + u1)
+                    x.append(x[-1] - u2)
+                if salto == 2:
+                    y.append(y[-1] - u1)
+                    x.append(x[-1] + u2)
+                if salto == 3:
+                    y.append(y[-1] - u1)
+                    x.append(x[-1] - u2)
+    #return x,y
+        plt.xlim(-1,1)
+        plt.ylim(0,1)
+        plt.plot(x,y,alpha = 0.5)
+        plt.plot(x[-1],y[-1],'or')
+    plt.show()
+
+#caminatas_completas(10)
+
