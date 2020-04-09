@@ -12,7 +12,7 @@ b2 = 50.0
 u2 = a2/b2#Incremento en S (x)
 
 rep = 5000
-frec_inicial = 0.5
+frec_inicial = 1/100
 x_init = 0
 y_init = 0.5
 
@@ -48,8 +48,8 @@ def probabilidades(s,k0):
 
     k1 = k0 - u1
 
-    p_menos_mas = 1 - probafixM1(s_barra_neg*((1+k1)/(1+k0)),(k0-k1)/(1+k0),frec_inicial)
-    p_menos_menos = 1 - probafixM1(s_barra*(1/(1+k0)),(k0-k1)/(1+k0),frec_inicial)
+    p_menos_mas = 1 - probafixM1(s_barra_neg*((1+k1)/(1+k0)),(k0-k1)/(1+k0),1-frec_inicial)
+    p_menos_menos = 1 - probafixM1(s_barra*(1/(1+k0)),(k0-k1)/(1+k0),1-frec_inicial)
 
     Sum  = p_mas_mas+p_mas_menos+p_menos_menos+p_menos_mas
     p_mas_mas =  p_mas_mas/Sum
