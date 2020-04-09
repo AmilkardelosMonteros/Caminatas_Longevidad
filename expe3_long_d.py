@@ -14,13 +14,11 @@ b2 = 50.0
 u2 = a2/b2#Incremento en S (x)
 
 rep = 5000
-frec_inicial = 0.5
+frec_inicial = 1/100
 x_init = 0
 y_init = 0.5
-
-d0 = 1
-d1 = 1
-a0 = 0
+a1 = 1
+a0 = 1
 
 #Model M1
 def probafixWF(a,y): #para k = 0, (es un WF normal) a es la seleccion y y la frecuencia inicial
@@ -54,8 +52,8 @@ def probabilidades(s,d0):
 
     d1 = d0 + u1
 
-    p_mas_mas =  u_mas_mas*( 1 - probafixM1(s_barra_neg*((1+d0)/(1+d0+a0)),(a0*(1+d1) -a1*(1+d0))/((1+d0+a0)*(1+d0)),frec_inicial))
-    p_mas_menos= u_mas_menos*( 1 - probafixM1(s_barra*((1+d0)/(1+d0+a0)),(a0*(1+d1) -a1*(1+d0))/((1+d0+a0)*(1+d0)),frec_inicial))
+    p_mas_mas =  u_mas_mas*( 1 - probafixM1(s_barra_neg*((1+d0)/(1+d0+a0)),(a0*(1+d1) -a1*(1+d0))/((1+d0+a0)*(1+d0)),1-frec_inicial))
+    p_mas_menos= u_mas_menos*( 1 - probafixM1(s_barra*((1+d0)/(1+d0+a0)),(a0*(1+d1) -a1*(1+d0))/((1+d0+a0)*(1+d0)),1-frec_inicial))
 
     d1 = d0 - u1
 
@@ -103,26 +101,3 @@ for i in range(rep):
     bar1.next()
 archivo.close()
 bar1.finish()
-
-def caminata_completa():
-    x = [x_init]
-    y = [y_init]
-    while True:
-        if abs(x[-1]) >= 1 or y[-1] > 1-u1 or y[-1] < u1:
-            break
-        else:
-            P = probabilidades(x[-1],y[-1])
-            salto = np.random.choice([0,1,2,3],p = P)
-            if salto == 0:
-                y.append(y[-1] + u1)
-                x.append(x[-1] + u2)
-            if salto == 1:
-                y.append(y[-1] + u1)
-                x.append(x[-1] - u2)
-            if salto == 2:
-                y.append(y[-1] - u1)
-                x.append(x[-1] + u2)
-            if salto == 3:
-                y.append(y[-1] - u1)
-                x.append(x[-1] - u2)
-    return x,y
